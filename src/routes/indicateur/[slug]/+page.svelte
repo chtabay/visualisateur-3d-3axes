@@ -1,10 +1,31 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { indicators } from '$lib/data/indicators';
+  import { indicators as defaultIndicators } from '$lib/data/indicators';
   import ThreeAxisChart from '$lib/components/ThreeAxisChart.svelte';
   
+  let indicators = [];
+  let indicator = null;
+  
   $: slug = $page.params.slug;
-  $: indicator = indicators.find(i => i.id === slug);
+  $: if (indicators.length > 0) {
+    indicator = indicators.find(i => i.id === slug);
+  }
+  
+  onMount(() => {
+    // Charger depuis localStorage ou utiliser les données par défaut
+    const savedData = localStorage.getItem('indicators');
+    if (savedData) {
+      try {
+        indicators = JSON.parse(savedData);
+      } catch (error) {
+        console.warn('Erreur localStorage, utilisation des données par défaut');
+        indicators = defaultIndicators;
+      }
+    } else {
+      indicators = defaultIndicators;
+    }
+  });
 </script>
 
 <svelte:head>

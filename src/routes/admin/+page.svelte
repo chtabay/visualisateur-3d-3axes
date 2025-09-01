@@ -83,7 +83,7 @@
     showIndicatorForm = true;
   }
 
-  async function saveIndicator() {
+  function saveIndicator() {
     const newIndicator = {
       id: indicatorForm.id,
       title: indicatorForm.title,
@@ -93,29 +93,33 @@
       data: editingIndicator?.data || []
     };
 
-    try {
-      const method = editingIndicator ? 'PUT' : 'POST';
-      const response = await fetch('/api/indicators', {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newIndicator)
-      });
-
-      if (response.ok) {
-        await loadIndicators();
-        if (!editingIndicator) {
-          // Si c'est un nouvel indicateur, on bascule en mode édition
-          editingIndicator = newIndicator;
-        }
-        showIndicatorForm = false;
-      } else {
-        const error = await response.json();
-        alert('Erreur: ' + error.error);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde:', error);
-      alert('Erreur lors de la sauvegarde');
+    // Validation basique
+    if (!newIndicator.id || !newIndicator.title) {
+      alert('Veuillez remplir tous les champs obligatoires');
+      return;
     }
+
+    if (editingIndicator) {
+      // Modification d'un indicateur existant
+      const index = indicators.findIndex(i => i.id === newIndicator.id);
+      if (index >= 0) {
+        indicators[index] = newIndicator;
+      }
+    } else {
+      // Vérifier que l'ID n'existe pas déjà
+      if (indicators.find(i => i.id === newIndicator.id)) {
+        alert('Un indicateur avec cet ID existe déjà');
+        return;
+      }
+      // Nouvel indicateur
+      indicators.push(newIndicator);
+      editingIndicator = newIndicator;
+    }
+
+    // Sauvegarder en localStorage
+    localStorage.setItem('indicators', JSON.stringify(indicators));
+    showIndicatorForm = false;
+    indicators = indicators; // Force la réactivité Svelte
   }
 
   function startNewPoint() {
@@ -136,7 +140,7 @@
     showPointForm = true;
   }
 
-  async function savePoint() {
+  function savePoint() {
     if (!editingIndicator) return;
 
     const newPoint = { ...pointForm };
@@ -147,58 +151,41 @@
       editingIndicator.data.push(newPoint);
     }
 
-    await updateIndicator();
+    updateIndicator();
     showPointForm = false;
   }
 
-  async function deletePoint(index) {
+  function deletePoint(index) {
     if (!editingIndicator) return;
     if (confirm('Supprimer ce point ?')) {
       editingIndicator.data.splice(index, 1);
-      await updateIndicator();
+      updateIndicator();
     }
   }
 
-  async function updateIndicator() {
+  function updateIndicator() {
     if (!editingIndicator) return;
 
-    try {
-      const response = await fetch('/api/indicators', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingIndicator)
-      });
-
-      if (response.ok) {
-        await loadIndicators();
-        // Maintenir la référence d'édition
-        const foundIndicator = indicators.find(i => i.id === editingIndicator.id);
-        if (foundIndicator) {
-          editingIndicator = foundIndicator;
-        }
-      }
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour:', error);
+    // Mettre à jour dans la liste
+    const index = indicators.findIndex(i => i.id === editingIndicator.id);
+    if (index >= 0) {
+      indicators[index] = editingIndicator;
+      // Sauvegarder en localStorage
+      localStorage.setItem('indicators', JSON.stringify(indicators));
+      indicators = indicators; // Force la réactivité Svelte
     }
   }
 
-  async function deleteIndicator(indicator) {
+  function deleteIndicator(indicator) {
     if (confirm(`Supprimer l'indicateur "${indicator.title}" ?`)) {
-      try {
-        const response = await fetch('/api/indicators', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: indicator.id })
-        });
-
-        if (response.ok) {
-          await loadIndicators();
-          if (editingIndicator?.id === indicator.id) {
-            editingIndicator = null;
-          }
-        }
-      } catch (error) {
-        console.error('Erreur lors de la suppression:', error);
+      // Supprimer de la liste
+      indicators = indicators.filter(i => i.id !== indicator.id);
+      
+      // Sauvegarder en localStorage
+      localStorage.setItem('indicators', JSON.stringify(indicators));
+      
+      if (editingIndicator?.id === indicator.id) {
+        editingIndicator = null;
       }
     }
   }
@@ -504,23 +491,7 @@
     margin: 1.5rem 0;
   }
 
-  .axis-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
 
-  .min-max {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
-  }
-
-  .min-max input {
-    width: 100%;
-    padding: 0.375rem;
-    font-size: 0.8rem;
-  }
 
   .coordinates {
     display: grid;

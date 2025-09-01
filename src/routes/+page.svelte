@@ -1,5 +1,23 @@
 <script lang="ts">
-  import { indicators } from '$lib/data/indicators';
+  import { onMount } from 'svelte';
+  import { indicators as defaultIndicators } from '$lib/data/indicators';
+  
+  let indicators = [];
+  
+  onMount(() => {
+    // Charger depuis localStorage ou utiliser les données par défaut
+    const savedData = localStorage.getItem('indicators');
+    if (savedData) {
+      try {
+        indicators = JSON.parse(savedData);
+      } catch (error) {
+        console.warn('Erreur localStorage, utilisation des données par défaut');
+        indicators = defaultIndicators;
+      }
+    } else {
+      indicators = defaultIndicators;
+    }
+  });
 </script>
 
 <svelte:head>
