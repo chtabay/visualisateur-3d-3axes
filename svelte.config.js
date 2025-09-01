@@ -8,12 +8,16 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: 'index.html',
+			fallback: '404.html',
 			precompress: false,
 			strict: false
 		}),
 		paths: {
 			base: dev ? '' : process.env.BASE_PATH
+		},
+		prerender: {
+			handleHttpError: 'warn',
+			handleMissingId: 'warn'
 		}
 	}
 };
