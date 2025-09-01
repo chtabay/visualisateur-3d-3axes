@@ -114,17 +114,40 @@
     scene.add(createAxis(new THREE.Vector3(0,0,1), 0x4444ff)); // Axe Z
     
     // 4. Créer les étiquettes d'axes
-    const createLabel = (text, position) => {
+    const createLabel = (text, position, className = 'axis-label') => {
         const div = document.createElement('div');
-        div.className = 'axis-label';
+        div.className = className;
         div.textContent = text;
         const label = new CSS2DObject(div);
         label.position.copy(position);
         return label;
     };
+    // Labels des axes principaux
     scene.add(createLabel(indicator.axisX.label, new THREE.Vector3(scaleSize * 0.7, 0, 0)));
     scene.add(createLabel(indicator.axisY.label, new THREE.Vector3(0, scaleSize * 0.7, 0)));
     scene.add(createLabel(indicator.axisZ.label, new THREE.Vector3(0, 0, scaleSize * 0.7)));
+
+    // Labels négatifs et positifs pour chaque axe
+    if (indicator.axisX.labelNegative) {
+      scene.add(createLabel(`− ${indicator.axisX.labelNegative}`, new THREE.Vector3(-scaleSize * 0.6, -0.5, 0), 'axis-label-negative'));
+    }
+    if (indicator.axisX.labelPositive) {
+      scene.add(createLabel(`+ ${indicator.axisX.labelPositive}`, new THREE.Vector3(scaleSize * 0.6, -0.5, 0), 'axis-label-positive'));
+    }
+    
+    if (indicator.axisY.labelNegative) {
+      scene.add(createLabel(`− ${indicator.axisY.labelNegative}`, new THREE.Vector3(-0.5, -scaleSize * 0.6, 0), 'axis-label-negative'));
+    }
+    if (indicator.axisY.labelPositive) {
+      scene.add(createLabel(`+ ${indicator.axisY.labelPositive}`, new THREE.Vector3(-0.5, scaleSize * 0.6, 0), 'axis-label-positive'));
+    }
+    
+    if (indicator.axisZ.labelNegative) {
+      scene.add(createLabel(`− ${indicator.axisZ.labelNegative}`, new THREE.Vector3(0, -0.5, -scaleSize * 0.6), 'axis-label-negative'));
+    }
+    if (indicator.axisZ.labelPositive) {
+      scene.add(createLabel(`+ ${indicator.axisZ.labelPositive}`, new THREE.Vector3(0, -0.5, scaleSize * 0.6), 'axis-label-positive'));
+    }
 
 
     // 5. Créer les points de données
@@ -275,9 +298,31 @@
     color: #333;
     font-family: sans-serif;
     font-size: 12px;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 2px 4px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+  }
+
+  :global(.axis-label-negative) {
+    color: #dc3545;
+    font-family: sans-serif;
+    font-size: 10px;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 1px 4px;
     border-radius: 2px;
+    border: 1px solid #dc3545;
+  }
+
+  :global(.axis-label-positive) {
+    color: #28a745;
+    font-family: sans-serif;
+    font-size: 10px;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 1px 4px;
+    border-radius: 2px;
+    border: 1px solid #28a745;
   }
   
   :global(.point-label) {

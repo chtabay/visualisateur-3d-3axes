@@ -4,18 +4,24 @@ export const indicators = [
     "title": "Analyse Compétitive Produit 2024",
     "axisX": {
       "label": "Coût de production",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Économique",
+      "labelPositive": "Coûteux"
     },
     "axisY": {
       "label": "Qualité perçue",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Basique",
+      "labelPositive": "Premium"
     },
     "axisZ": {
       "label": "Rapidité de mise sur le marché",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Lent",
+      "labelPositive": "Rapide"
     },
     "data": [
       {
@@ -46,18 +52,24 @@ export const indicators = [
     "title": "Analyse Satisfaction Client",
     "axisX": {
       "label": "Prix",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Abordable",
+      "labelPositive": "Cher"
     },
     "axisY": {
       "label": "Satisfaction",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Insatisfait",
+      "labelPositive": "Satisfait"
     },
     "axisZ": {
       "label": "Recommandation",
-      "min": 0,
-      "max": 10
+      "min": -10,
+      "max": 10,
+      "labelNegative": "Déconseille",
+      "labelPositive": "Recommande"
     },
     "data": [
       {

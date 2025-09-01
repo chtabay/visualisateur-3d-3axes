@@ -13,9 +13,9 @@
   let indicatorForm = {
     id: '',
     title: '',
-    axisX: { label: '', min: 0, max: 10 },
-    axisY: { label: '', min: 0, max: 10 },
-    axisZ: { label: '', min: 0, max: 10 }
+    axisX: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' },
+    axisY: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' },
+    axisZ: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' }
   };
 
   // Formulaire point
@@ -65,9 +65,9 @@
     indicatorForm = {
       id: '',
       title: '',
-      axisX: { label: '', min: -10, max: 10 },
-      axisY: { label: '', min: -10, max: 10 },
-      axisZ: { label: '', min: -10, max: 10 }
+      axisX: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' },
+      axisY: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' },
+      axisZ: { label: '', min: -10, max: 10, labelNegative: '', labelPositive: '' }
     };
     showIndicatorForm = true;
   }
@@ -77,9 +77,27 @@
     indicatorForm = {
       id: indicator.id,
       title: indicator.title,
-      axisX: { label: indicator.axisX.label, min: indicator.axisX.min || 0, max: indicator.axisX.max || 10 },
-      axisY: { label: indicator.axisY.label, min: indicator.axisY.min || 0, max: indicator.axisY.max || 10 },
-      axisZ: { label: indicator.axisZ.label, min: indicator.axisZ.min || 0, max: indicator.axisZ.max || 10 }
+      axisX: { 
+        label: indicator.axisX.label, 
+        min: indicator.axisX.min || -10, 
+        max: indicator.axisX.max || 10,
+        labelNegative: indicator.axisX.labelNegative || '',
+        labelPositive: indicator.axisX.labelPositive || ''
+      },
+      axisY: { 
+        label: indicator.axisY.label, 
+        min: indicator.axisY.min || -10, 
+        max: indicator.axisY.max || 10,
+        labelNegative: indicator.axisY.labelNegative || '',
+        labelPositive: indicator.axisY.labelPositive || ''
+      },
+      axisZ: { 
+        label: indicator.axisZ.label, 
+        min: indicator.axisZ.min || -10, 
+        max: indicator.axisZ.max || 10,
+        labelNegative: indicator.axisZ.labelNegative || '',
+        labelPositive: indicator.axisZ.labelPositive || ''
+      }
     };
     showIndicatorForm = true;
   }
@@ -88,9 +106,27 @@
     const newIndicator = {
       id: indicatorForm.id,
       title: indicatorForm.title,
-      axisX: { label: indicatorForm.axisX.label, min: -10, max: 10 },
-      axisY: { label: indicatorForm.axisY.label, min: -10, max: 10 },
-      axisZ: { label: indicatorForm.axisZ.label, min: -10, max: 10 },
+      axisX: { 
+        label: indicatorForm.axisX.label, 
+        min: -10, 
+        max: 10,
+        labelNegative: indicatorForm.axisX.labelNegative,
+        labelPositive: indicatorForm.axisX.labelPositive
+      },
+      axisY: { 
+        label: indicatorForm.axisY.label, 
+        min: -10, 
+        max: 10,
+        labelNegative: indicatorForm.axisY.labelNegative,
+        labelPositive: indicatorForm.axisY.labelPositive
+      },
+      axisZ: { 
+        label: indicatorForm.axisZ.label, 
+        min: -10, 
+        max: 10,
+        labelNegative: indicatorForm.axisZ.labelNegative,
+        labelPositive: indicatorForm.axisZ.labelPositive
+      },
       data: editingIndicator?.data || []
     };
 
@@ -258,19 +294,31 @@
           </div>
 
           <div class="axes-config">
-            <div class="form-group">
+            <div class="axis-group">
               <label for="axis-x">Axe X</label>
               <input id="axis-x" bind:value={indicatorForm.axisX.label} placeholder="Ex: Coût" />
+              <div class="axis-labels">
+                <input bind:value={indicatorForm.axisX.labelNegative} placeholder="Label négatif (ex: Économique)" />
+                <input bind:value={indicatorForm.axisX.labelPositive} placeholder="Label positif (ex: Coûteux)" />
+              </div>
             </div>
             
-            <div class="form-group">
+            <div class="axis-group">
               <label for="axis-y">Axe Y</label>
               <input id="axis-y" bind:value={indicatorForm.axisY.label} placeholder="Ex: Qualité" />
+              <div class="axis-labels">
+                <input bind:value={indicatorForm.axisY.labelNegative} placeholder="Label négatif (ex: Basique)" />
+                <input bind:value={indicatorForm.axisY.labelPositive} placeholder="Label positif (ex: Premium)" />
+              </div>
             </div>
             
-            <div class="form-group">
+            <div class="axis-group">
               <label for="axis-z">Axe Z</label>
               <input id="axis-z" bind:value={indicatorForm.axisZ.label} placeholder="Ex: Rapidité" />
+              <div class="axis-labels">
+                <input bind:value={indicatorForm.axisZ.labelNegative} placeholder="Label négatif (ex: Lent)" />
+                <input bind:value={indicatorForm.axisZ.labelPositive} placeholder="Label positif (ex: Rapide)" />
+              </div>
             </div>
           </div>
 
@@ -491,6 +539,31 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
     margin: 1.5rem 0;
+  }
+
+  .axis-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .axis-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .axis-labels input {
+    font-size: 0.875rem;
+    padding: 0.375rem;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+
+  .axis-labels input::placeholder {
+    color: #888;
+    font-style: italic;
   }
 
 
