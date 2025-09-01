@@ -28,8 +28,8 @@
 
   let editingPointIndex = -1;
 
-  onMount(async () => {
-    await loadIndicators();
+  onMount(() => {
+    loadIndicators();
     
     // Vérifier si on doit éditer un indicateur existant
     const editId = $page.url.searchParams.get('edit');
@@ -41,13 +41,22 @@
     }
   });
 
-  async function loadIndicators() {
-    try {
-      const response = await fetch('/api/indicators');
-      indicators = await response.json();
-    } catch (error) {
-      console.error('Erreur lors du chargement:', error);
-    }
+  function loadIndicators() {
+    // En mode statique, on charge depuis les données par défaut
+    // et on vérifie s'il y a des modifications en localStorage
+    import('$lib/data/indicators').then(module => {
+      const savedData = localStorage.getItem('indicators');
+      if (savedData) {
+        try {
+          indicators = JSON.parse(savedData);
+        } catch (error) {
+          console.warn('Erreur localStorage, utilisation des données par défaut');
+          indicators = module.indicators;
+        }
+      } else {
+        indicators = module.indicators;
+      }
+    });
   }
 
   function startNewIndicator() {
