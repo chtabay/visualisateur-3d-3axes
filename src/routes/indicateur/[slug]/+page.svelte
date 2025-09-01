@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { base } from '$app/paths';
   import { indicators as defaultIndicators } from '$lib/data/indicators';
   import ThreeAxisChart from '$lib/components/ThreeAxisChart.svelte';
   
@@ -34,9 +35,9 @@
 
 <div class="container">
   <nav class="breadcrumb">
-    <a href="/">← Retour aux indicateurs</a>
+    <a href="{base}/">← Retour aux indicateurs</a>
     {#if indicator}
-      <a href="/admin?edit={indicator.id}">Modifier cet indicateur</a>
+      <a href="{base}/admin?edit={indicator.id}">Modifier cet indicateur</a>
     {/if}
   </nav>
 
@@ -48,7 +49,7 @@
     <div class="error">
       <h2>Indicateur introuvable</h2>
       <p>L'indicateur avec l'ID "{slug}" n'existe pas.</p>
-      <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+      <a href="{base}/" class="btn btn-primary">Retour à l'accueil</a>
     </div>
   {/if}
 </div>

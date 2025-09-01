@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { base } from '$app/paths';
   import { indicators as defaultIndicators } from '$lib/data/indicators';
   
   let indicators = [];
@@ -38,7 +39,7 @@
     {#if indicators.length === 0}
       <div class="empty-state">
         <p>Aucun indicateur créé pour le moment.</p>
-        <a href="/admin" class="btn btn-primary">Créer le premier indicateur</a>
+        <a href="{base}/admin" class="btn btn-primary">Créer le premier indicateur</a>
       </div>
     {:else}
       <div class="indicators-grid">
@@ -56,8 +57,8 @@
               </div>
             </div>
             <div class="card-actions">
-              <a href="/indicateur/{indicator.id}" class="btn btn-view" data-sveltekit-reload>Voir</a>
-              <a href="/admin?edit={indicator.id}" class="btn btn-edit">Modifier</a>
+              <a href="{base}/indicateur/{indicator.id}" class="btn btn-view" data-sveltekit-reload>Voir</a>
+              <a href="{base}/admin?edit={indicator.id}" class="btn btn-edit">Modifier</a>
             </div>
           </div>
         {/each}

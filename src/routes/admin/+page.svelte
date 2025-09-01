@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { base } from '$app/paths';
   import { goto } from '$app/navigation';
 
   let indicators = [];
@@ -208,11 +209,12 @@
 </svelte:head>
 
 <div class="container">
+  <nav class="breadcrumb">
+    <a href="{base}/">← Retour aux indicateurs</a>
+  </nav>
+  
   <header>
     <h1>Administration des Indicateurs</h1>
-    <nav>
-      <a href="/">← Retour à l'accueil</a>
-    </nav>
   </header>
 
   <div class="admin-layout">
@@ -283,7 +285,7 @@
             <h3>{editingIndicator.title}</h3>
             <div class="detail-actions">
               <button on:click={() => startEditIndicator(editingIndicator)} class="btn btn-sm">Modifier</button>
-              <a href="/indicateur/{editingIndicator.id}" class="btn btn-sm btn-view">Voir</a>
+              <a href="{base}/indicateur/{editingIndicator.id}" class="btn btn-sm btn-view">Voir</a>
             </div>
           </div>
 
